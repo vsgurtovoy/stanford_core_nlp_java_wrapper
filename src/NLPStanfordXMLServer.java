@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +22,7 @@ import org.simpleframework.transport.connect.SocketConnection;
 
 public class NLPStanfordXMLServer implements Container {
     private static StanfordCoreNLP pipeline;
+    private static Properties props;
     private static int port = 8080;
     private static final Logger log = Logger.getLogger( NLPStanfordXMLServer.class.getName() );
     private static int total_requests = 0;
@@ -66,8 +68,11 @@ public class NLPStanfordXMLServer implements Container {
             // Silently keep port at 8080
         }
 
+        props = new Properties();
+        props.setProperty("annotators", "tokenize, ssplit, pos, lemma");
+
         // Initialize the Stanford Core NLP
-        pipeline = new StanfordCoreNLP();
+        pipeline = new StanfordCoreNLP(props);
 
         // Start the server
         Container container = new NLPStanfordXMLServer();
